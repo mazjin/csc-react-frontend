@@ -63,16 +63,6 @@ export const CharacterFormBasics = () => {
         newCharacter.language_options = updateNewCharacterArray(newCharacter.language_options, [values.language_options ? [values.language_options]:[]], source, additionalSourcesToFilter)
         newCharacter.features = updateNewCharacterArray(newCharacter.features, [values.traits, values.features, values.racial_traits],source, additionalSourcesToFilter);
         
-        
-        // newCharacter.proficiencies = Object.keys(character.proficiencies||{}).filter(key=> ![source,...additionalSourcesToFilter].includes(character.proficiencies[key].source)).reduce((obj, key) => obj={...obj, [key]: character.proficiencies[key]}, {});
-        // newCharacter.skills = Object.keys(character.skills || {}).filter(key=> ![source,...additionalSourcesToFilter].includes(character.skills[key].source)).reduce((obj, key) => obj={...obj, [key]: character.skills[key]}, {});
-        // (values.proficiencies || values.starting_proficiencies || []).forEach(proficiency => {
-        //     if (proficiency.index.substring(0,6)==='skill-'){
-        //         newCharacter.skills[proficiency.index.substring(6)] = {proficient: true, source:source, name: proficiency.name}
-        //     }
-        //     newCharacter.proficiencies[proficiency.index] = {proficient: true, source: source, name: proficiency.name}
-        // });
-
         const newProficiencies = (values.proficiencies || values.starting_proficiencies || []).filter(prof => prof.index.substring(0,6)!=='skill-').reduce((obj, prof) => obj ={...obj, [prof.index]: {proficient: true, source:source, name: prof.name}}, {});
         const newSkills = (values.proficiencies || values.starting_proficiencies || []).filter(prof => prof.index.substring(0,6)==='skill-').reduce((obj, prof) => obj ={...obj, [prof.index.substring(6)]: {proficient: true, source:source, name: prof.name}}, {});
         newCharacter.proficiencies = updateNewCharacterObject(newCharacter.proficiencies, [newProficiencies], source, additionalSourcesToFilter);
@@ -80,7 +70,6 @@ export const CharacterFormBasics = () => {
 
         
         newCharacter.proficiency_options = updateNewCharacterArray(newCharacter.proficiency_options, [values.proficiency_choices, values.starting_proficiency_options ? [values.starting_proficiency_options]:[]], source, additionalSourcesToFilter)
-
         newCharacter.saving_throws = updateNewCharacterObject(
             newCharacter.saving_throws, 
             [(values.saving_throws||[]).reduce((obj, save) => obj = {...obj, [save.index]: {proficient: true, source: source, name: save.name}}, {})],
