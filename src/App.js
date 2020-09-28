@@ -1,25 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { AppBar, Container, IconButton, Toolbar, Tooltip, Typography } from '@material-ui/core';
+import ReplayRoundedIcon from '@material-ui/icons/ReplayRounded';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import React, { useContext } from 'react';
+import { CharacterFormBasics } from './components/CharacterFormBasics';
+import { CharacterFormStats } from './components/CharacterFormStats';
+import { CharacterMiscOptions } from './components/CharacterMiscOptions';
+import { Frontpage } from './components/Frontpage';
+import { CharacterContext } from './context/CharacterState';
 
 function App() {
+  const {stage, reset}= useContext(CharacterContext)
+
+  const parseStep = (stage) => {
+    switch(stage) {
+      case 0:
+        return <Frontpage />
+      case 1:
+        return <CharacterFormBasics />
+      case 2:
+        return <CharacterFormStats />
+      case 3: 
+        return <CharacterMiscOptions />
+      default:
+        return <Frontpage />
+    }
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MuiThemeProvider>
+      <React.Fragment>
+        <div className="min-h-screen w-full">
+          <AppBar 
+            className="top-0 "
+            color="primary"
+            position="sticky"
+          >
+            <Toolbar className="flex place-content-between">
+              <Typography variant="h6">Character Sheet Generator 5e</Typography>
+              <Tooltip title="Reset" placement="bottom">
+                <IconButton className="rounded-full" onClick={reset} color="inherit" aria-label="reset">
+                  <ReplayRoundedIcon/>
+                </IconButton>
+              </Tooltip>
+            </Toolbar>
+          </AppBar>
+          <Container className="my-10 mx-8 flex" maxWidth="md">
+            {parseStep(stage)}
+          </Container>
+        </div>
+      </React.Fragment>
+    </MuiThemeProvider>
   );
 }
 
