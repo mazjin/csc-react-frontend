@@ -63,8 +63,8 @@ export const CharacterFormBasics = () => {
         newCharacter.language_options = updateNewCharacterArray(newCharacter.language_options, [values.language_options ? [values.language_options]:[]], source, additionalSourcesToFilter)
         newCharacter.features = updateNewCharacterArray(newCharacter.features, [values.traits, values.features, values.racial_traits],source, additionalSourcesToFilter);
         
-        const newProficiencies = (values.proficiencies || values.starting_proficiencies || []).filter(prof => prof.index.substring(0,6)!=='skill-').reduce((obj, prof) => obj ={...obj, [prof.index]: {proficient: true, source:source, name: prof.name}}, {});
-        const newSkills = (values.proficiencies || values.starting_proficiencies || []).filter(prof => prof.index.substring(0,6)==='skill-').reduce((obj, prof) => obj ={...obj, [prof.index.substring(6)]: {proficient: true, source:source, name: prof.name}}, {});
+        const newProficiencies = (values.proficiencies || values.starting_proficiencies || []).filter(prof => prof.index.substring(0,6)!=='skill-').reduce((obj, prof) => obj ={...obj, [prof.index]: {index: prof.index, proficient: true, source:source, name: prof.name}}, {});
+        const newSkills = (values.proficiencies || values.starting_proficiencies || []).filter(prof => prof.index.substring(0,6)==='skill-').reduce((obj, prof) => obj ={...obj, [prof.index.substring(6)]: {index: prof.index.substring(6), proficient: true, source:source, name: prof.name}}, {});
         newCharacter.proficiencies = updateNewCharacterObject(newCharacter.proficiencies, [newProficiencies], source, additionalSourcesToFilter);
         newCharacter.skills = updateNewCharacterObject(newCharacter.skills, [newSkills], source, additionalSourcesToFilter);
 
