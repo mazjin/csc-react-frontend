@@ -43,7 +43,7 @@ function App() {
               </Tooltip>
             </Toolbar>
           </AppBar>
-          <Container className="my-10 mx-8 flex" maxWidth="md">
+          <Container className="my-10 mx-8 flex" >
             {parseStep(stage)}
           </Container>
         </div>
