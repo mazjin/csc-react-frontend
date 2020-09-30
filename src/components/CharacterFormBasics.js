@@ -60,12 +60,13 @@ export const CharacterFormBasics = () => {
         return characterObj;
     }
 
-    const handleBasicsChange = (source, values, additionalSourcesToFilter=[]) => {
+    const handleBasicsChange = async(source, values, additionalSourcesToFilter=[]) => {
         const newCharacter = character;
         newCharacter[source] = values;
         newCharacter.languages = updateNewCharacterArray(newCharacter.languages, [values.languages], source, additionalSourcesToFilter)
         newCharacter.language_options = updateNewCharacterArray(newCharacter.language_options, [values.language_options ? [values.language_options]:[]], source, additionalSourcesToFilter)
-        newCharacter.features = updateNewCharacterArray(newCharacter.features, [values.traits, values.features, values.racial_traits],source, additionalSourcesToFilter);
+        const newFeatures = await Promise.all([...(values.traits||[]), ...(values.features||[]), ...(values.racial_traits||[])].map(async(feature) => await fetchDetails(`https://www.dnd5eapi.co${feature.url}`).then(res => ({...feature, ...res}))))
+        newCharacter.features = updateNewCharacterArray(newCharacter.features, [newFeatures],source, additionalSourcesToFilter);
         
         const newProficiencies = (values.proficiencies || values.starting_proficiencies || []).filter(prof => prof.index.substring(0,6)!=='skill-').reduce((obj, prof) => obj ={...obj, [prof.index]: {...prof, proficient: true, source:source}}, {});
         const newSkills = (values.proficiencies || values.starting_proficiencies || []).filter(prof => prof.index.substring(0,6)==='skill-').reduce((obj, prof) => obj ={...obj, [prof.index.substring(6)]: {...prof, index: prof.index.substring(6), proficient: true, source:source}}, {});
@@ -82,9 +83,12 @@ export const CharacterFormBasics = () => {
         );
         newCharacter.stats = updateNewCharacterObject(newCharacter.stats, [(values.ability_bonuses||[]).reduce((obj,bonus) => obj = {...obj, [bonus.index]: {...bonus, source}}, {})], source, additionalSourcesToFilter);
         newCharacter.ability_bonus_options = updateNewCharacterObject(newCharacter.ability_bonus_options, [values.ability_bonus_options && {...values.ability_bonus_options, source} ], source, additionalSourcesToFilter);
+        newCharacter.ability_score_increases = values.ability_score_bonuses || newCharacter.ability_score_increases;
         newCharacter.hit_die = values.hit_die || newCharacter.hit_die;
         newCharacter.base_speed = values.speed || newCharacter.base_speed;
         newCharacter.size = values.size || newCharacter.size;
+        newCharacter.prof_bonus = values.prof_bonus || newCharacter.prof_bonus;
+        newCharacter.class_specific = values.class_specific || newCharacter.class_specific;
         
         updateCharacter('', newCharacter)
     }
