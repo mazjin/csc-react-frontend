@@ -1,14 +1,11 @@
-
-import { Paper, Tooltip, Chip } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react'
 import { CharacterContext } from '../context/CharacterState';
 import { CharacterMiscOptionsNavigation } from './CharacterMiscOptionsNavigation';
+import { CharacterProficienciesSummary } from './CharacterProficienciesSummary';
 import { CharacterProficiencyOption } from './CharacterProficiencyOption';
-import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
-import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 
 export const CharacterMiscOptionsProficiencies = () => {
-    const {character} = useContext(CharacterContext);
+    const {character, updateCharacter} = useContext(CharacterContext);
 
     const [proficiencyOptions, setProficiencyOptions] = useState(character.proficiency_options);
     const [skillsList, setSkillsList] = useState([]);
@@ -23,53 +20,38 @@ export const CharacterMiscOptionsProficiencies = () => {
         populateSkillsList();
     }, [])
 
-    const handleSelect = (optionKey,profKey, prof) => {
+    const handleSelect = (optionKey, option, profKey, prof) => {
         const newProficiencyOptions = [...proficiencyOptions];
         newProficiencyOptions[optionKey].from.splice(profKey, 1, {...prof, proficient: !prof.proficient});
         setProficiencyOptions(newProficiencyOptions);
         if (prof.index.substring(0,6)==='skill-'){
             const newSkillsList = [...skillsList];
             const foundIndex = newSkillsList.findIndex(skill => skill.index === prof.index.substring(6))
-            newSkillsList[foundIndex] = {...(newSkillsList[foundIndex]), proficient: !prof.proficient};
+            newSkillsList[foundIndex] = {...(newSkillsList[foundIndex]), proficient: !prof.proficient, source: option.source};
             setSkillsList(newSkillsList);
         } else {
             const newProficienciesList = [...proficienciesList];
-            prof.proficient? newProficienciesList.splice(newProficienciesList.findIndex(skill => skill.index === prof.index), 1) : newProficienciesList.push({...(prof), proficient: !prof.proficient}) 
+            prof.proficient? newProficienciesList.splice(newProficienciesList.findIndex(skill => skill.index === prof.index), 1) : newProficienciesList.push({...(prof), proficient: !prof.proficient, source: option.source}) 
             setProficienciesList(newProficienciesList)
         }
+    }
+
+    const onConfirm = async () => {
+        const newSkills = skillsList.reduce((obj, skill) => obj = {...obj, [skill.index]: skill}, {})
+        updateCharacter('skills', newSkills);
+        const newProficiencies = await Promise.all(proficienciesList.map(async(prof) => await fetch(`https://www.dnd5eapi.co${prof.url}`).then(res => res.json()).then(res => ({...prof, ...res}))));
+        updateCharacter('proficiencies', newProficiencies);
     }
 
     return (
         <>
             <div className="grid grid-cols-3 col-gap-2 row-gap-2">
                     <div className="flex flex-col col-start-1">
-                        <Paper className="py-3 px-3 my-2 mx-2">
-                            <p>Skills:</p>
-                            {
-                                skillsList.map(skill =>
-                                        <div className="flex w-auto">
-                                            {skill.proficient ? <RadioButtonCheckedIcon/> : <RadioButtonUncheckedIcon />}
-                                            <Tooltip key={skill.index} title={skill.desc} placement="right">
-                                                <p>{skill.name}: {character.stats[skill.ability_score.index].raw + (character.stats[skill.ability_score.index].bonus || 0) + (skill.proficient ? 2 : 0)}</p>
-                                            </Tooltip>
-                                        </div>
-                                )
-                            }
-                        </Paper>
-                        <Paper className="py-3 px-3 my-2 mx-2">
-                            <p>Other proficiencies:</p>
-                            <div>
-                                {
-                                    proficienciesList.map(prof =>
-                                            <Chip
-                                                key={prof.index}
-                                                label={prof.name}
-                                                color='primary'
-                                            />
-                                        )
-                                }
-                            </div>
-                        </Paper>
+                        <CharacterProficienciesSummary
+                            character={character}
+                            skillsList={skillsList}
+                            proficienciesList={proficienciesList}
+                        />
                     </div>
                     <div className="flex flex-col col-start-2 col-end-4">
                         {proficiencyOptions && proficiencyOptions.map((option, optionKey) => 
@@ -82,7 +64,7 @@ export const CharacterMiscOptionsProficiencies = () => {
                         )}
                     </div>
                 </div>
-            <CharacterMiscOptionsNavigation />
+            <CharacterMiscOptionsNavigation onConfirm={onConfirm}/>
         </>
     )
 }

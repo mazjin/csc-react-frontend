@@ -29,7 +29,7 @@ export const CharacterProficiencyOption = ({option, optionKey, handleSelect}) =>
                                     deleteIcon={<DoneIcon />}
                                     color="primary"
                                     variant={prof.proficient ? undefined:'outlined'}
-                                    onClick={() => handleSelect(optionKey,profKey, prof)}
+                                    onClick={() => handleSelect(optionKey, option, profKey, prof)}
                                 />
                     )}
                 </Paper>
