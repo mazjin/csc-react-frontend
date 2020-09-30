@@ -42,7 +42,11 @@ export const CharacterProvider = ({ children }) => {
     function reset() {
         dispatch({
             type:'SET_STATE',
-            payload: initialState
+            payload: {
+                character: {},
+                stage: 0,
+                stageOption:''
+            }
         })
     }
 
