@@ -29,7 +29,7 @@ export const CharacterFormStatPicker = ({stats, statName, statDisplayName, handl
                         <MenuItem key={0} value={''} name={statName}>None</MenuItem>
                         {[...(rolledStats.result||[]), ...(stats?.[statName]?.raw ? [stats?.[statName]?.raw]:[])].map((stat, index) => <MenuItem key={index} value={stat} name={statName}>{stat}</MenuItem>)}
                 </Select>
-                {character.stats[statName]?.bonus && stats[statName]?.raw &&
+                {character.stats[statName]?.bonus > 0 && stats[statName]?.raw > 0 &&
                     <>
                         <FormHelperText>Bonus: {character.stats[statName].bonus > 0 && '+'}{character.stats[statName].bonus}</FormHelperText>
                         <FormHelperText>Total: {character.stats[statName].bonus + stats[statName].raw}</FormHelperText>

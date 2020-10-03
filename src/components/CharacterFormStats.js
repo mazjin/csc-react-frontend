@@ -47,7 +47,6 @@ export const CharacterFormStats = () => {
 
     const handleStatChange = e => {
         e.preventDefault();
-        console.log(e)
         if (usedStats[e.target.name]) {
             rolledStats.result.push(usedStats[e.target.name]);
         }
@@ -80,7 +79,9 @@ export const CharacterFormStats = () => {
             const stats = {...character.stats}
             if (rollDefinition === 'colville') {
                 const statNames = ['str','dex','con','int','wis','cha']
-                res.result.forEach((stat, index) => stats[statNames[index]]={...stats[statNames[index]], raw:stat});
+                res.result.forEach((stat, index) => {
+                    stats[statNames[index]].raw = stat;
+                });
             }
             setRolledStats(res)
             setStats(stats)

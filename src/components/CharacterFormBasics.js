@@ -37,12 +37,12 @@ export const CharacterFormBasics = () => {
 
     useEffect(() => {
         fetchDetails(`https://www.dnd5eapi.co/api/races`)
-        // fetch(`${process.env.REACT_SRD_LOOKUP_API_URL}races`)
+        // fetchDetails(`${process.env.REACT_APP_SRD_LOOKUP_API_URL_BASE}/api/races`)
         .then(res=>setRaces(res.results))
         .catch(err => console.log(err));
 
         fetchDetails(`https://www.dnd5eapi.co/api/classes`)
-        // fetch(`${process.env.REACT_SRD_LOOKUP_API_URL}classes`)
+        // fetchDetails(`${process.env.REACT_APP_SRD_LOOKUP_API_URL_BASE}/api/classes`)
         .then(res=>setClasses(res.results))
         .catch(err => console.log(err));
     }, [])
@@ -81,7 +81,20 @@ export const CharacterFormBasics = () => {
             source,
             additionalSourcesToFilter
         );
-        newCharacter.stats = updateNewCharacterObject(newCharacter.stats, [(values.ability_bonuses||[]).reduce((obj,bonus) => obj = {...obj, [bonus.index]: {...bonus, source}}, {})], source, additionalSourcesToFilter);
+        (Object.values(newCharacter.stats)).forEach((stat) => {
+            if ([source,...additionalSourcesToFilter].includes(stat.source)) {
+                newCharacter.stats[stat.index].bonus = 0;
+                newCharacter.stats[stat.index].source = undefined;
+            }
+        })
+        if (values.ability_bonuses){
+            values.ability_bonuses.forEach(bonus => {
+                newCharacter.stats[bonus.index].bonus = bonus.bonus;
+                newCharacter.stats[bonus.index].source = source;
+
+            })
+        }
+
         newCharacter.ability_bonus_options = updateNewCharacterObject(newCharacter.ability_bonus_options, [values.ability_bonus_options && {...values.ability_bonus_options, source} ], source, additionalSourcesToFilter);
         newCharacter.ability_score_increases = values.ability_score_bonuses || newCharacter.ability_score_increases;
         newCharacter.hit_die = values.hit_die || newCharacter.hit_die;
@@ -94,29 +107,33 @@ export const CharacterFormBasics = () => {
     }
 
     const handleClassChange = async(e) => {
+        e.preventDefault();
         Promise.all([
             fetchDetails(`https://www.dnd5eapi.co/api/classes/${e.target.value.index}`),            
-            fetchDetails(`https://www.dnd5eapi.co/api/classes/${e.target.value.index}/levels/1`)
+            fetchDetails(`https://www.dnd5eapi.co/api/classes/${e.target.value.index}/levels/${character.level}`)
         ])
         .then(res => ({...res[1], ...res[0]}))
         .then(res=> handleBasicsChange('class', res, ['subclass']))
     }
-    const handleSubClassChange = (e) => {
+    const handleSubClassChange = async(e) => {
+        e.preventDefault();
         Promise.all([
             fetchDetails(`https://www.dnd5eapi.co/api/subclasses/${e.target.value.index}`),            
-            fetchDetails(`https://www.dnd5eapi.co/api/subclasses/${e.target.value.index}/levels/1`)
+            fetchDetails(`https://www.dnd5eapi.co/api/subclasses/${e.target.value.index}/levels/${character.level}`)
         ])
         .then(res => ({...res[1], ...res[0]}))
         .then(res=> handleBasicsChange('subclass', res))
     }
-    const handleRaceChange = (e) => {
+    const handleRaceChange = async(e) => {
+        e.preventDefault();
         fetchDetails(`https://www.dnd5eapi.co/api/races/${e.target.value.index}`)
-        // fetch(`${process.env.REACT_SRD_LOOKUP_API_URL}races`)
+        // fetchDetails(`${process.env.REACT_APP_SRD_LOOKUP_API_URL_BASE}/api/races`)
         .then(res=> handleBasicsChange('race', res, ['subrace']))
     }
-    const handleSubRaceChange = (e) => {
+    const handleSubRaceChange = async(e) => {
+        e.preventDefault();
         fetchDetails(`https://www.dnd5eapi.co/api/subraces/${e.target.value.index}`)
-        // fetch(`${process.env.REACT_SRD_LOOKUP_API_URL}races`)
+        // fetchDetails(`${process.env.REACT_APP_SRD_LOOKUP_API_URL_BASE}/api/subraces`)
         .then(res=> handleBasicsChange('subrace', res))
     }
 

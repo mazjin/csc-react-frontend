@@ -6,7 +6,7 @@ import { Paper, Tooltip, Chip } from '@material-ui/core';
 export const CharacterProficienciesSummary = ({character, skillsList, proficienciesList}) => {
     return (
         <>
-            <Paper className="py-3 px-3 my-2 mx-2">
+            {skillsList && skillsList.length > 0 && <Paper className="py-3 px-3 my-2 mx-2">
                 <p>Skills:</p>
                 {
                     skillsList.map(skill =>
@@ -18,8 +18,8 @@ export const CharacterProficienciesSummary = ({character, skillsList, proficienc
                             </div>
                     )
                 }
-            </Paper>
-            <Paper className="py-3 px-3 my-2 mx-2">
+            </Paper>}
+            {proficienciesList && proficienciesList.length > 0 && <Paper className="py-3 px-3 my-2 mx-2">
                 <p>Other proficiencies:</p>
                 <div>
                     {
@@ -32,7 +32,7 @@ export const CharacterProficienciesSummary = ({character, skillsList, proficienc
                             )
                     }
                 </div>
-            </Paper>
+            </Paper>}
         </>
     )
 }

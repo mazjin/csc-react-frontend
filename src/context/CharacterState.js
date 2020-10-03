@@ -1,8 +1,9 @@
 import React, {createContext, useReducer} from 'react';
+import { Character } from '../models/Character';
 import CharacterReducer from './CharacterReducer';
 
 const initialState = {
-    character: {},
+    character: new Character(),
     stage: 0, //0-frontpage, 1 - basics, 2 - options, 3 - confirm, 4 - success/generate
     stageOption:''
 
@@ -43,7 +44,7 @@ export const CharacterProvider = ({ children }) => {
         dispatch({
             type:'SET_STATE',
             payload: {
-                character: {},
+                character: new Character(),
                 stage: 0,
                 stageOption:''
             }

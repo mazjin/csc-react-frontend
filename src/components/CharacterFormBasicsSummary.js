@@ -17,10 +17,10 @@ export const CharacterFormBasicsSummary = () => {
                 { stats && <>
                     <p className="font-semibold">Ability Bonuses</p>
                     <ul>
-                        {Object.keys(stats).map(index => 
-                            <li key={index}
+                        {Object.values(stats).filter(stat => stat.bonus).map(stat => 
+                            <li key={stat.index}
                                 className="px-1"
-                            >{stats[index].name}: {stats[index].bonus>0 ? '+':''}{stats[index].bonus}
+                            >{stat.name}: {stat.bonus>0 ? '+':''}{stat.bonus}
                             </li>)}
                     </ul>
                     </>
@@ -49,7 +49,7 @@ export const CharacterFormBasicsSummary = () => {
                         >{language.name}</li>)}
                 </ul>
                 {
-                    language_options?.length && language_options.map(choice =>
+                    language_options?.length > 0 && language_options.map(choice =>
                         <>
                             <p className="text-sm">
                                 Choose {choice.choose} from:
