@@ -3,6 +3,7 @@ import { CharacterContext } from '../context/CharacterState';
 import { CharacterMiscOptionsNavigation } from './CharacterMiscOptionsNavigation';
 import { CharacterProficienciesSummary } from './CharacterProficienciesSummary';
 import { CharacterProficiencyOption } from './CharacterProficiencyOption';
+import { CharacterSkillsSummary } from './CharacterSkillsSummary';
 
 export const CharacterMiscOptionsProficiencies = () => {
     const {character, updateCharacter} = useContext(CharacterContext);
@@ -47,9 +48,11 @@ export const CharacterMiscOptionsProficiencies = () => {
         <>
             <div className="grid grid-cols-3 col-gap-2 row-gap-2">
                     <div className="flex flex-col col-start-1">
-                        <CharacterProficienciesSummary
+                        <CharacterSkillsSummary
                             character={character}
                             skillsList={skillsList}
+                        />
+                        <CharacterProficienciesSummary
                             proficienciesList={proficienciesList}
                         />
                     </div>
