@@ -40,7 +40,7 @@ export const CharacterSummary = () => {
                 <AccordionDetails>
                     <div className="w-full grid xl:grid-cols-3 md:grid-cols-1 grid-cols-3">
                         <div className="col-span-1">
-                            {character.proficiencies ? 
+                            {character.skills && Object.values(character.skills).some(skill => skill.proficient) ? 
                                 <CharacterSkillsSummary 
                                     character={character}
                                     skillsList={Object.values(character.skills)}
@@ -49,7 +49,7 @@ export const CharacterSummary = () => {
                             }
                         </div>
                         <div className="xl:col-span-2 md:col-span-1 col-span-2">
-                            {character.proficiencies ? 
+                            {character.proficiencies && Object.values(character.proficiencies).some(prof => prof.proficient) ? 
                                 <CharacterProficienciesSummary 
                                     proficienciesList={Object.values(character.proficiencies)}
                                 />
