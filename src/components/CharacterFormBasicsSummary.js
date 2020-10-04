@@ -14,7 +14,7 @@ export const CharacterFormBasicsSummary = () => {
         <Card variant="outlined">
             <CardContent className="overflow-y-auto max-w-md flex" style={{'max-height': '20rem'}}>
                 <div className="flex flex-col mx-2">
-                { stats && <>
+                { stats && Object.values(stats).some(stat => stat.bonus) && <>
                     <p className="font-semibold">Ability Bonuses</p>
                     <ul>
                         {Object.values(stats).filter(stat => stat.bonus).map(stat => 
@@ -38,16 +38,18 @@ export const CharacterFormBasicsSummary = () => {
                         </ul>
                     </>
                 }
-                <p><span className="font-semibold">Size:</span> {size}</p>
-                <p><span className="font-semibold">Base Speed:</span> {base_speed}</p>
-                <p className="font-semibold">Languages:</p>
-                <ul>
-                    {languages.map(language => 
-                        <li 
-                            key={language.index}
-                            className="px-1"
-                        >{language.name}</li>)}
-                </ul>
+                {size && <p><span className="font-semibold">Size:</span> {size}</p>}
+                {base_speed && <p><span className="font-semibold">Base Speed:</span> {base_speed}</p>}
+                {languages && languages.length > 0 && <>
+                    <p className="font-semibold">Languages:</p>
+                    <ul>
+                        {languages.map(language => 
+                            <li 
+                                key={language.index}
+                                className="px-1"
+                            >{language.name}</li>)}
+                    </ul>
+                </>}
                 {
                     language_options?.length > 0 && language_options.map(choice =>
                         <>
@@ -65,7 +67,7 @@ export const CharacterFormBasicsSummary = () => {
                 </div>
                 <div className="flex flex-col mx-2">
                     {hit_die && <p><span className="font-semibold">Hit Die:</span> {hit_die}</p>}
-                    {saving_throws &&  <>
+                    {saving_throws && Object.values(saving_throws).some(save => save.proficient) && <>
                         <p className="font-semibold">Saves:</p>
                         <ul>
                             {Object.keys(saving_throws).map(key => 
@@ -75,7 +77,7 @@ export const CharacterFormBasicsSummary = () => {
                                 >{saving_throws[key].name}</li>)}
                         </ul>
                     </>}
-                    {proficiencies && Object.keys(proficiencies)?.length && <>
+                    {proficiencies && Object.keys(proficiencies)?.length > 0 && <>
                         <p className="font-semibold">Proficiencies</p>
                         <ul>
                             {Object.keys(proficiencies).map(key => 
