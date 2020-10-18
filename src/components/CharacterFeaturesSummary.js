@@ -15,7 +15,9 @@ export const CharacterFeaturesSummary = () => {
                         </AccordionSummary>
                         <AccordionDetails className="flex flex-col">
                             <Typography variant="overline">{character[feature.source].name || feature.source}</Typography>
-                            <p>{feature.desc}</p>
+                            {feature.desc.map(descSection =>
+                                <p>{descSection}</p>
+                            )}
                         </AccordionDetails>
                     </Accordion>
                 </>)
