@@ -19,7 +19,7 @@ export const CharacterMiscOptionsProficiencies = () => {
             setSkillsList(newSkillsList);
         }
         populateSkillsList();
-    }, [])
+    }, [character.skills])
 
     const handleSelect = (optionKey, option, profKey, prof) => {
         const newProficiencyOptions = [...proficiencyOptions];
