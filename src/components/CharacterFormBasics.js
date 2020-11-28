@@ -89,8 +89,8 @@ export const CharacterFormBasics = () => {
         })
         if (values.ability_bonuses){
             values.ability_bonuses.forEach(bonus => {
-                newCharacter.stats[bonus.index].bonus = bonus.bonus;
-                newCharacter.stats[bonus.index].source = source;
+                newCharacter.stats[bonus.ability_score.index].bonus = bonus.bonus;
+                newCharacter.stats[bonus.ability_score.index].source = source;
 
             })
         }
