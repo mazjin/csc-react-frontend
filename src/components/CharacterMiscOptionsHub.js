@@ -6,6 +6,7 @@ import GavelIcon from '@material-ui/icons/Gavel';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import NaturePeopleIcon from '@material-ui/icons/NaturePeople';
 import PetsIcon from '@material-ui/icons/Pets';
+import { CharacterGenerateSheet } from './CharacterGenerateSheet';
 
 
 export const CharacterMiscOptionsHub = () => {
@@ -18,6 +19,7 @@ export const CharacterMiscOptionsHub = () => {
                 <Button className="w-full h-64" variant="outlined" color="primary" onClick={() => goToStageOption('prof')}><MenuBookIcon fontSize="large"/>Proficiencies & Skills</Button>
                 <Button className="w-full h-64" variant="outlined" color="primary" onClick={() => goToStageOption('class')}><PetsIcon fontSize="large"/>Class Features & Options</Button>
                 <Button className="w-full h-64" variant="outlined" color="primary" onClick={() => goToStageOption('equip')}><GavelIcon fontSize="large"/>Starting Equipment</Button>
+                <CharacterGenerateSheet />
             </div>
             <CharacterFormNavigation />
         </>

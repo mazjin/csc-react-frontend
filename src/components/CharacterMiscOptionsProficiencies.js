@@ -15,7 +15,7 @@ export const CharacterMiscOptionsProficiencies = () => {
     useEffect(() => {
         async function populateSkillsList() {
             let newSkillsList = await fetch(`https://www.dnd5eapi.co/api/skills`).then(res => res.json());
-            newSkillsList = await Promise.all(newSkillsList.results.map(async(skill) => await fetch(`https://www.dnd5eapi.co${skill.url}`).then(res => res.json()).then(res => ({...res, proficient: character.skills[res.index] && character.skills[res.index].proficient}))))
+            newSkillsList = await Promise.all(newSkillsList.results.map(async(skill) => await fetch(`https://www.dnd5eapi.co${skill.url}`).then(res => res.json()).then(res => ({...res, proficient: (character.skills[res.index] && character.skills[res.index].proficient) || false}))))
             setSkillsList(newSkillsList);
         }
         populateSkillsList();
