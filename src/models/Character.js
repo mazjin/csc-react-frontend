@@ -29,6 +29,7 @@ export class Character {
     skills = {};
     proficiencies=[];
     languages=[];
+    starting_equipment=[];
 
 
     _populateData = async(prop) => {

@@ -96,6 +96,8 @@ export const CharacterFormBasics = () => {
         }
 
         newCharacter.ability_bonus_options = updateNewCharacterObject(newCharacter.ability_bonus_options, [values.ability_bonus_options && {...values.ability_bonus_options, source} ], source, additionalSourcesToFilter);
+        newCharacter.starting_equipment = updateNewCharacterArray(newCharacter.starting_equipment, values.starting_equipment ? [values.starting_equipment]:[], source, additionalSourcesToFilter);
+        newCharacter.starting_equipment_options = updateNewCharacterArray(newCharacter.starting_equipment_options, values.starting_equipment_options ? [values.starting_equipment_options]:[], source, additionalSourcesToFilter);
         newCharacter.ability_score_increases = values.ability_score_bonuses || newCharacter.ability_score_increases;
         newCharacter.hit_die = values.hit_die || newCharacter.hit_die;
         newCharacter.base_speed = values.speed || newCharacter.base_speed;
@@ -110,9 +112,10 @@ export const CharacterFormBasics = () => {
         e.preventDefault();
         Promise.all([
             fetchDetails(`https://www.dnd5eapi.co/api/classes/${e.target.value.index}`),            
-            fetchDetails(`https://www.dnd5eapi.co/api/classes/${e.target.value.index}/levels/${character.level}`)
+            fetchDetails(`https://www.dnd5eapi.co/api/classes/${e.target.value.index}/levels/${character.level}`),
+            fetchDetails(`https://www.dnd5eapi.co/api/starting-equipment/${e.target.value.index}`)
         ])
-        .then(res => ({...res[1], ...res[0]}))
+        .then(res => ({...res[1], ...res[0], starting_equipment: res[2].starting_equipment, starting_equipment_options: res[2].starting_equipment_options}))
         .then(res=> handleBasicsChange('class', res, ['subclass']))
     }
     const handleSubClassChange = async(e) => {

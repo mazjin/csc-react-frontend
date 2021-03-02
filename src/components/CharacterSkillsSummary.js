@@ -13,7 +13,7 @@ export const CharacterSkillsSummary = ({character, skillsList}) => {
                             <div className="flex w-auto">
                                 {skill.proficient ? <RadioButtonCheckedIcon/> : <RadioButtonUncheckedIcon />}
                                 <Tooltip key={skill.index} title={skill.desc} placement="right">
-                                    <p>{skill.name}: {character.stats[skill.ability_score.index].raw + (character.stats[skill.ability_score.index].bonus || 0) + (skill.proficient ? 2 : 0)}</p>
+                                    <p>{skill.name}: {skill.ability_score ? (character.stats[skill.ability_score.index].raw + (character.stats[skill.ability_score.index].bonus || 0) + (skill.proficient ? 2 : 0)) : "-"}</p>
                                 </Tooltip>
                             </div>
                     )
