@@ -1,6 +1,7 @@
-import { Card, CardContent,  List, Typography } from '@material-ui/core';
-import React, { useContext, useEffect, useState } from 'react'
+import { List } from '@material-ui/core';
+import React, { useContext, useEffect, useState } from 'react';
 import { CharacterContext } from '../context/CharacterState';
+import { EquipmentDetails } from './EquipmentDetails';
 
 export const CharacterMiscOptionsEquipment = () => {
     const {character} = useContext(CharacterContext);
@@ -26,7 +27,6 @@ export const CharacterMiscOptionsEquipment = () => {
         }
 
         async function populateList(items){
-
             return Promise.all(items.map(opt => fetchEquipmentDetail(opt)));
         }
 
@@ -53,30 +53,14 @@ export const CharacterMiscOptionsEquipment = () => {
         <div className="flex flex-col">
             <div className="w-full">
                 <List component="nav">
-                    {equipment && equipment.map((eqp, key) => 
-                        <Card variant="outlined" key={key}>
-                            <CardContent className="flex flex-col">
-                                <div className="flex justify-between items-center">
-                                    <Typography variant="h5">
-                                        {eqp && eqp.name}
-                                    </Typography>
-                                    { eqp.quantity && <Typography variant="h6">
-                                        {eqp.quantity}
-                                    </Typography>}
-                                </div>
-                                {eqp.contents && <ul>
-                                    {eqp && eqp.contents && Object.keys(eqp.contents).map(x => <li>{x.name}</li>)}
-                                </ul>}
-                                {eqp && eqp.equipment_category && <Typography variant="subtitle1">
-                                    {eqp.equipment_category.name}
-                                    ({(eqp.weapon_category && eqp.weapon_category.name)||(eqp.armor_category && eqp.armor_category.name)||eqp.gear_category && eqp.gear_category.name||"-"})
-                                 </Typography>}
-                            </CardContent>
-                        </Card>
+                    {equipment && equipment.map((item, key) => 
+                        <EquipmentDetails item={item.equipment || item} key={key} quantity={item.quantity}/>
                     )}
                 </List>
             </div>
-            {equipmentOptions && equipmentOptions.length && equipmentOptions.map(choice => choice.length && choice.map(opt =><div key={opt.index}>{opt.index}</div>))}
+            {equipmentOptions && equipmentOptions.length && equipmentOptions.map(choice => choice.length && choice.map(opt =>
+            <EquipmentDetails item={opt.equipment || opt} key={opt.index} quantity={opt.quantity}/>
+            ))}
         </div>
     )
 }
