@@ -1,10 +1,12 @@
 import { List } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
 import { CharacterContext } from '../context/CharacterState';
+import { RepositoryContext } from '../context/RepositoryState';
 import { EquipmentDetails } from './EquipmentDetails';
 
 export const CharacterMiscOptionsEquipment = () => {
     const {character} = useContext(CharacterContext);
+    const { getData } = useContext(RepositoryContext);
     const [equipment, setEquipment] = useState(character.starting_equipment);
     const [equipmentOptions, setEquipmentOptions] = useState(character.starting_equipment_options);
     
@@ -12,8 +14,7 @@ export const CharacterMiscOptionsEquipment = () => {
         async function fetchEquipmentDetail(equipmentEntry) {
             let detail = equipmentEntry.equipment || equipmentEntry.item || (equipmentEntry.equipment_option && equipmentEntry.equipment_option.from.equipment_category) || equipmentEntry;
             if (detail.populated) { return; }
-            return fetch(`https://www.dnd5eapi.co${detail.url}`)
-                .then(res => res.json())
+            return getData(detail.url)
                 .then(res => {
                     Object.assign(detail, res);
                     detail.populated = true;
