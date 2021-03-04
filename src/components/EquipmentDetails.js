@@ -6,6 +6,18 @@ import { Card, CardContent, Typography } from '@material-ui/core';
 
 export const EquipmentDetails = ({item, key, quantity=1}) => {
     // const {character} = useContext(CharacterContext);
+
+    function renderDetails(item) {
+        switch (item.equipment_category.index) {
+            case 'armor':
+                return <EquipmentDetailsArmor item={item}/>;
+            case 'weapon':
+                return <EquipmentDetailsWeapon item={item}/>;
+            default:
+                return <div>Unrecognised category: {item.equipment_category.index}</div>
+        }
+    }
+
     return (
         <Card variant="outlined" key={key}>
             <CardContent className="flex flex-col">
@@ -24,14 +36,7 @@ export const EquipmentDetails = ({item, key, quantity=1}) => {
                     </div>
                     {item && <div className="flex mx-4">
                     <div>
-                        {
-                            item.equipment_category && item.equipment_category.index === 'armor' &&
-                            <EquipmentDetailsArmor item={item}/>
-                        }
-                        {
-                            item.equipment_category && item.equipment_category.index === 'weapon' && 
-                            <EquipmentDetailsWeapon item={item}/>
-                        }
+                        { item.equipment_category && renderDetails(item)}
                     </div>
                     </div>}
                     <div className="flex mx-4">
