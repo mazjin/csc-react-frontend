@@ -15,18 +15,19 @@ export const RepositoryProvider = ({children}) => {
     }
 
     async function getData(uri) {
-        if (state.repository[uri.replace(/[/-]/g,"")]) {
-            return state.repository[uri.replace(/[/-]/g,"")];
+        let label = uri.replace(/[/-]/g,"");
+        if (state.repository[label]) {
+            return state.repository[label];
         } else {
-            var requestData = makeRequest(uri);
+            var requestData = await makeRequest(uri);
             dispatch({
                 type: 'SET_DATA',
                 payload: {
-                    uri,
+                    label,
                     value: requestData
                 }
             });
-            return await requestData;
+            return requestData;
         }
     }
 

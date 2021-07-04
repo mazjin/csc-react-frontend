@@ -1,4 +1,4 @@
-import { AppBar, ClickAwayListener, Container, Drawer, IconButton, makeStyles, Toolbar, Tooltip, Typography } from '@material-ui/core';
+import { AppBar, Container, Drawer, IconButton, makeStyles, Toolbar, Tooltip, Typography } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ReplayRoundedIcon from '@material-ui/icons/ReplayRounded';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';

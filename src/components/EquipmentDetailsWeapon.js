@@ -5,7 +5,7 @@ export const EquipmentDetailsWeapon = ({item}) => {
     // const {character} = useContext(CharacterContext);
     return (
         <div className="flex flex-col">
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-col justify-between">
                 <div>
                     Damage: {item.damage.damage_dice}{item.two_handed_damage && " (" + item.two_handed_damage + "2-handed"} {item.damage.damage_type.name}
                 </div>

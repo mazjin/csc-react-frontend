@@ -6,7 +6,6 @@ const initialState = {
     character: new Character(),
     stage: 0, //0-frontpage, 1 - basics, 2 - options, 3 - confirm, 4 - success/generate
     stageOption:''
-
 }
 
 export const CharacterContext = createContext(initialState);

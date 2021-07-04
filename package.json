@@ -39,6 +39,7 @@
   "devDependencies": {
     "autoprefixer": "^9.7.6",
     "postcss-cli": "^7.1.2",
+    "snowpack": "^2.18.1",
     "tailwindcss": "^1.8.10"
   }
 }
