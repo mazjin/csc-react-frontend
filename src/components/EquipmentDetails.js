@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-// import { CharacterContext } from '../context/CharacterState';
+import React from 'react';
 import { EquipmentDetailsWeapon } from './EquipmentDetailsWeapon';
 import { EquipmentDetailsArmor } from './EquipmentDetailsArmor';
 import { Card, CardContent, Typography } from '@material-ui/core';
@@ -7,7 +6,6 @@ import { EquipmentOption } from './EquipmentOption';
 import DoneIcon from '@material-ui/icons/Done';
 
 export const EquipmentDetails = ({item, optionKey, choiceKey, quantity=1, handleSelect = () => {}}) => {
-    // const {character} = useContext(CharacterContext);
 
     function renderDetails(item) {
         switch (item.equipment_category.index) {
@@ -54,7 +52,7 @@ export const EquipmentDetails = ({item, optionKey, choiceKey, quantity=1, handle
                         {item && item.contents && item.contents.length && <ul>
                             {item.contents.map(thing => {
                                 if (thing.item) {
-                                    return <li>{thing.item.name}{thing.quantity && " x " + thing.quantity}</li>;
+                                    return <li key={thing.item.index}>{thing.item.name}{thing.quantity && " x " + thing.quantity}</li>;
                                 }
                                 else {
                                     return <li>{thing.name}</li>;

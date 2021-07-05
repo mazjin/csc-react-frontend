@@ -19,7 +19,6 @@ export class Stat {
         return this._bonus;
     }
     set bonus(value) {
-        console.log(this.index + 'bonus set to' + value)
         this._bonus = value;
         this.updateStat();
     }

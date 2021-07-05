@@ -1,6 +1,5 @@
 import { CharacterFormNavigation } from './CharacterFormNavigation';
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@material-ui/core'
-import { RaisedButton } from 'material-ui'
+import { Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@material-ui/core'
 import React, { useContext, useState } from 'react'
 import { CharacterContext } from '../context/CharacterState'
 import { CharacterFormStatPicker } from './CharacterFormStatPicker'
@@ -116,11 +115,12 @@ export const CharacterFormStats = () => {
                 }
             </FormControl>
             <br/>
-            <RaisedButton
-                    label={rolledStats?.results?.length>0 ? 'Re-roll': 'Roll'}
-                    primary={true}
+            <Button variant="contained"
+                    color="primary"
                     onClick={rollStats}
-                />
+                >
+                    {rolledStats?.results?.length>0 ? 'Re-roll': 'Roll'}
+            </Button>
             <br/>
             {(rolledStats.result?.length > 0 || (stats && Object.keys(stats).some(stat => stats[stat]?.raw))) &&
                 <div className="flex">

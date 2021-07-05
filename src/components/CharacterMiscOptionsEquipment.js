@@ -44,7 +44,6 @@ export const CharacterMiscOptionsEquipment = () => {
                     Promise.all(newEquipmentOptions.map(choice => choice.from && populateList(choice.from)))
                 ]).then(
                     res => {
-                        console.log("promise.all result", res)
                         setEquipment(res[0]);
                         setEquipmentOptions(res[1]);
                     }

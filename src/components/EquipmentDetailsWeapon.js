@@ -1,8 +1,6 @@
-import React, { useContext } from 'react';
-// import { CharacterContext } from '../context/CharacterState';
+import React from 'react';
 
 export const EquipmentDetailsWeapon = ({item}) => {
-    // const {character} = useContext(CharacterContext);
     return (
         <div className="flex flex-col">
             <div className="flex flex-col justify-between">

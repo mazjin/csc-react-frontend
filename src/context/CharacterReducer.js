@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (state, action) => {
     const setDeepValue = (target, value, path) => {
         if (typeof path === 'string') {

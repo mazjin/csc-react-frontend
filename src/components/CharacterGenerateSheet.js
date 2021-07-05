@@ -14,9 +14,6 @@ export const CharacterGenerateSheet = () => {
             },
             body: JSON.stringify({character})
         }).then(async(response) => {
-            // console.log(response)
-            // console.log(await response.blob('application/pdf'))
-            // console.log(response)
             let a = document.createElement('a')
             a.download = "character_sheet.pdf"
             a.href=window.URL.createObjectURL(await response.blob('application/pdf'))
@@ -26,7 +23,7 @@ export const CharacterGenerateSheet = () => {
     }
 
     return (
-        <Paper class="flex items-center justify-center m-6 col-span-2">
+        <Paper className="flex items-center justify-center m-6 col-span-2">
             <Button
                 color="primary"
                 variant="contained"

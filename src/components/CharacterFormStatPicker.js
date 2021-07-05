@@ -1,5 +1,4 @@
-import { FormControl, FormHelperText, FormLabel, Select } from '@material-ui/core'
-import { MenuItem } from 'material-ui'
+import { FormControl, FormHelperText, FormLabel, MenuItem, Select } from '@material-ui/core'
 import React, { useContext } from 'react'
 import { CharacterContext } from '../context/CharacterState'
 

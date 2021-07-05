@@ -10,8 +10,15 @@ import { CharacterFormBasicsSummary } from './CharacterFormBasicsSummary';
 
 export const CharacterFormBasics = () => {
     const {character, updateCharacter} = useContext(CharacterContext);
-    const [races, setRaces] = useState([])
-    const [classes, setClasses] = useState([])
+    const [raceOptions, setRaceOptions] = useState([])
+    const [subraceOptions, setSubraceOptions] = useState([])
+    const [classOptions, setClassOptions] = useState([])
+    const [subclassOptions, setSubclassOptions] = useState([])
+
+    const [selectedRace, setSelectedRace] = useState("");
+    const [selectedSubrace, setSelectedSubrace] = useState("");
+    const [selectedClass, setSelectedClass] = useState("");
+    const [selectedSubclass, setSelectedSubclass] = useState("");
 
     const fetchDetails = (url) => fetch(url).then(res => res.json())
         .catch((err) => {
@@ -35,17 +42,32 @@ export const CharacterFormBasics = () => {
         wizard: ['specialising in'],
     }
 
+    const mapOption = (option) => {
+        return {
+            name: option.name,
+            index: option.index
+        }
+    }
+
     useEffect(() => {
         fetchDetails(`https://www.dnd5eapi.co/api/races`)
         // fetchDetails(`${process.env.REACT_APP_SRD_LOOKUP_API_URL_BASE}/api/races`)
-        .then(res=>setRaces(res.results))
+        .then(res=>{
+            // setRaces(res.results);
+            setRaceOptions(res.results.map(option => mapOption(option)));
+        })
         .catch(err => console.log(err));
 
         fetchDetails(`https://www.dnd5eapi.co/api/classes`)
         // fetchDetails(`${process.env.REACT_APP_SRD_LOOKUP_API_URL_BASE}/api/classes`)
-        .then(res=>setClasses(res.results))
+        .then(res=> {
+            // setClasses(res.results)
+            setClassOptions(res.results.map(option => mapOption(option)))
+        })
         .catch(err => console.log(err));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
 
     const updateNewCharacterArray = (characterArray, newValuesArrays, source, additionalSourcesToFilter=[]) => {
         characterArray = (characterArray?.filter(val => ![source,...additionalSourcesToFilter].includes(val.source)) || []);
@@ -110,40 +132,49 @@ export const CharacterFormBasics = () => {
 
     const handleClassChange = async(e) => {
         e.preventDefault();
+        setSelectedClass(e.target.value);
         Promise.all([
-            fetchDetails(`https://www.dnd5eapi.co/api/classes/${e.target.value.index}`),            
-            fetchDetails(`https://www.dnd5eapi.co/api/classes/${e.target.value.index}/levels/${character.level}`),
-            fetchDetails(`https://www.dnd5eapi.co/api/starting-equipment/${e.target.value.index}`)
+            fetchDetails(`https://www.dnd5eapi.co/api/classes/${e.target.value?.index}`),            
+            fetchDetails(`https://www.dnd5eapi.co/api/classes/${e.target.value?.index}/levels/${character.level}`),
+            fetchDetails(`https://www.dnd5eapi.co/api/starting-equipment/${e.target.value?.index}`)
         ])
         .then(res => ({...res[1], ...res[0], starting_equipment: res[2].starting_equipment, starting_equipment_options: res[2].starting_equipment_options}))
-        .then(res=> handleBasicsChange('class', res, ['subclass']))
+        .then(res=> {
+            handleBasicsChange('class', res, ['subclass']);
+            setSubclassOptions(
+                res.subclasses?.map(option => mapOption(option)))
+        })
     }
     const handleSubClassChange = async(e) => {
         e.preventDefault();
-        Promise.all([
-            fetchDetails(`https://www.dnd5eapi.co/api/subclasses/${e.target.value.index}`),            
-            fetchDetails(`https://www.dnd5eapi.co/api/subclasses/${e.target.value.index}/levels/${character.level}`)
-        ])
-        .then(res => ({...res[1], ...res[0]}))
-        .then(res=> handleBasicsChange('subclass', res))
+        setSelectedSubclass(e.target.value);
+        fetchDetails(`https://www.dnd5eapi.co/api/subclasses/${e.target.value?.index}`)
+            .then(res => ({ ...res}))
+            .then(res=> handleBasicsChange('subclass', res))
     }
     const handleRaceChange = async(e) => {
         e.preventDefault();
-        fetchDetails(`https://www.dnd5eapi.co/api/races/${e.target.value.index}`)
+        setSelectedRace(e.target.value);
+        fetchDetails(`https://www.dnd5eapi.co/api/races/${e.target.value?.index}`)
         // fetchDetails(`${process.env.REACT_APP_SRD_LOOKUP_API_URL_BASE}/api/races`)
-        .then(res=> handleBasicsChange('race', res, ['subrace']))
+        .then(res=> {
+            handleBasicsChange('race', res, ['subrace']);
+            setSubraceOptions(res.subraces?.map(option => mapOption(option)));
+        })
     }
     const handleSubRaceChange = async(e) => {
         e.preventDefault();
-        fetchDetails(`https://www.dnd5eapi.co/api/subraces/${e.target.value.index}`)
+        setSelectedSubrace(e.target.value);
+        fetchDetails(`https://www.dnd5eapi.co/api/subraces/${e.target.value?.index}`)
         // fetchDetails(`${process.env.REACT_APP_SRD_LOOKUP_API_URL_BASE}/api/subraces`)
         .then(res=> handleBasicsChange('subrace', res))
     }
 
+
     return (
         <div className="flex flex-col items-center">
             <div className="flex">
-                <p className="my-4">I want to play a{'aeiou'.includes(character.race?.name.toLowerCase()[0]) && 'n'}</p>
+                <p className="my-4">I want to play a{(character.race && 'aeiou'.includes(character.race?.name.toLowerCase()[0])) && 'n'}</p>
                 <div className="flex flex-col">
                     <div className="flex">
                         <div className="min-w-md max-w-lg mx-3">
@@ -152,28 +183,28 @@ export const CharacterFormBasics = () => {
                                 <Select
                                     labelId="selectRace-label"
                                     id="selectRace"
-                                    value={character.race}
+                                    value={selectedRace}
                                     onChange={handleRaceChange}
                                     label="Race"
                                 >
-                                    {races.map(race => <MenuItem key={race.index} value={race}>{race.name}</MenuItem>)}
+                                    {raceOptions.map(race => race && <MenuItem key={race.index} value={race}>{race.name}</MenuItem>)}
                                 </Select>
                                 <FormHelperText>Required</FormHelperText>
                             </FormControl>
                         </div>
                         {character.race?.subraces?.length >0 && <>
-                            <p className="my-4">(specifically a{'aeiou'.includes(character.race?.subrace?.name.toLowerCase()[0]) && 'n'}</p>
+                            <p className="my-4">(specifically a{(character.race && 'aeiou'.includes(character.race?.subrace?.name.toLowerCase()[0])) && 'n'}</p>
                             <div className="min-w-md max-w-lg mx-3">
                                 <FormControl variant="outlined">
                                     <InputLabel id="selectSubRace-label">Sub-race</InputLabel>
                                     <Select
                                         labelId="selectSubRace-label"
                                         id="selectSubRace"
-                                        value={character.race.subrace}
+                                        value={selectedSubrace}
                                         onChange={handleSubRaceChange}
                                         label="Sub-race"
                                     >
-                                        {character.race.subraces.map(race => <MenuItem key={race.index} value={race}>{race.name}</MenuItem>)}
+                                        {subraceOptions.map(race => race && <MenuItem key={race.index} value={race}>{race.name}</MenuItem>)}
                                     </Select>
                                     <FormHelperText>Required</FormHelperText>
                                 </FormControl>
@@ -191,11 +222,11 @@ export const CharacterFormBasics = () => {
                                 <Select
                                     labelId="selectClass-label"
                                     id="selectClass"
-                                    value={character.class}
+                                    value={selectedClass}
                                     onChange={handleClassChange}
                                     label="Class"
                                     >
-                                    {classes.map(cls => <MenuItem key={cls.index} value={cls}>{cls.name}</MenuItem>)}
+                                    {classOptions.map(cls => cls && <MenuItem key={cls.index} value={cls}>{cls.name}</MenuItem>)}
                                 </Select>
                                 <FormHelperText>Required</FormHelperText>
                             </FormControl>
@@ -209,11 +240,11 @@ export const CharacterFormBasics = () => {
                                         <Select
                                             labelId="selectSubClass-label"
                                             id="selectSubClass"
-                                            value={character.class.subclass}
+                                            value={selectedSubclass}
                                             onChange={handleSubClassChange}
                                             label="Sub-class"
                                             >
-                                            {character.class.subclasses.map(cls => <MenuItem key={cls.index} value={cls}>{cls.name}</MenuItem>)}
+                                            {subclassOptions.map(cls => cls && <MenuItem key={cls.index} value={cls}>{cls.name}</MenuItem>)}
                                         </Select>
                                         <FormHelperText>Required</FormHelperText>
                                     </FormControl>

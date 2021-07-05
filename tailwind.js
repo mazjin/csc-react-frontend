@@ -4,8 +4,8 @@ module.exports = {
     // purgeLayersByDefault: true,
   },
   purge: [],
-  target: 'relaxed',
-  prefix: '',
+  // target: 'relaxed',
+  // prefix: '',
   important: false,
   separator: ':',
   theme: {

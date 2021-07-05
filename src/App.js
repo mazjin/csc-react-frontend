@@ -1,7 +1,7 @@
 import { AppBar, Container, Drawer, IconButton, makeStyles, Toolbar, Tooltip, Typography } from '@material-ui/core';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ReplayRoundedIcon from '@material-ui/icons/ReplayRounded';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import React, { useContext, useState } from 'react';
 import { CharacterFormBasics } from './components/CharacterFormBasics';
 import { CharacterFormStats } from './components/CharacterFormStats';
@@ -41,10 +41,10 @@ function App() {
   }))
 
   const classes = useStyles();
-
+  const theme = createMuiTheme();
 
   return (
-    <MuiThemeProvider>
+    <ThemeProvider theme={theme}>
       <React.Fragment>
         <div className="min-h-screen w-full">
           <AppBar 
@@ -64,7 +64,7 @@ function App() {
               </Tooltip>
             </Toolbar>
           </AppBar>
-          <Container className="my-10 mx-8 flex" >
+          <Container className="my-10 mx-8 flex">
             {parseStep(stage)}
               {/* <ClickAwayListener onClickAway={() => drawerOpen && setDrawerOpen(false)}> */}
               <Drawer anchor="left" variant="temporary" open={drawerOpen} className="lg:w-1/2 w-full" classes={{paper: "lg:w-1/2 w-full"}}>
@@ -75,7 +75,7 @@ function App() {
           </Container>
         </div>
       </React.Fragment>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 }
 

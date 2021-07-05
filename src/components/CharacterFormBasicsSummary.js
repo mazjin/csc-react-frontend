@@ -12,7 +12,7 @@ export const CharacterFormBasicsSummary = () => {
 
     return (
         <Card variant="outlined">
-            <CardContent className="overflow-y-auto max-w-md flex" style={{'max-height': '20rem'}}>
+            <CardContent className="overflow-y-auto max-w-md flex" style={{'maxHeight': '20rem'}}>
                 <div className="flex flex-col mx-2">
                 { stats && Object.values(stats).some(stat => stat.bonus) && <>
                     <p className="font-semibold">Ability Bonuses</p>
